@@ -6,6 +6,7 @@ function mergeWith(objects: object[], customizer) {
     ret = mergeTo(ret, a, customizer);
   });
 
+  // 最终 rules 就只是通过 [...a,...b] 进行连接
   return ret;
 }
 

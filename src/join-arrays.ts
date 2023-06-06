@@ -14,7 +14,11 @@ export default function joinArrays({
   customizeObject?: Customize;
   key?: Key;
 } = {}) {
+  // 以 craco 添加 svgo-loader 为例 ==》 最终 rules 就通过 [...a,...b] 进行了连接
+  // 1. {module:{}} 与 {module:{}}
+  // 2. {rules:[]} 与 {rules:[]}
   return function _joinArrays(a: any, b: any, k: Key): any {
+    // 递归属性路径
     const newKey = key ? `${key}.${k}` : k;
 
     if (isFunction(a) && isFunction(b)) {
@@ -24,6 +28,7 @@ export default function joinArrays({
     if (isArray(a) && isArray(b)) {
       const customResult = customizeArray && customizeArray(a, b, newKey);
 
+      // 2. 合并 rules
       return customResult || [...a, ...b];
     }
 
@@ -32,6 +37,7 @@ export default function joinArrays({
     }
 
     if (isPlainObject(a) && isPlainObject(b)) {
+      // false 
       const customResult = customizeObject && customizeObject(a, b, newKey);
 
       return (
@@ -39,8 +45,10 @@ export default function joinArrays({
         mergeWith(
           [a, b],
           joinArrays({
+            // undefined
             customizeArray,
             customizeObject,
+            // 1. module 
             key: newKey,
           })
         )

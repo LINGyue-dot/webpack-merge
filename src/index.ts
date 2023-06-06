@@ -67,6 +67,7 @@ function mergeWithCustomize<Configuration extends object>(
     }
 
     return mergeWith(
+      // 直接连接
       [firstConfiguration].concat(configurations),
       joinArrays(options)
     ) as Configuration;
